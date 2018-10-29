@@ -1,4 +1,12 @@
- <?php
+<!DOCTYPE html>
+<html>
+<body>
+
+
+<!-- Page content -->
+<div class="w3-container w3-content w3-center w3-padding-64" style="max-width:800px" id="band">
+    <h2 class="w3-wide">HASIL UPLOAD</h2>
+<?php
 // Baca lokasi file sementar dan nama file dari form (fupload)
 include('class.pdf2text.php');
 include_once 'IDNstemmer.php';
@@ -38,7 +46,7 @@ $myArray = explode(" ", $teks); //proses tokenisasi
 
 $filteredarray = array_diff($myArray, $astoplist); //remove stopword
 $st = new IDNstemmer();
-$konek = mysqli_connect("fdb21.awardspace.net","2774446_luthfi","al3natore","2774446_luthfi");
+$konek = mysqli_connect("localhost","id7294462_luthfi","alenatore","id7294462_dbstbi");
 
  
 
@@ -49,10 +57,11 @@ if (strlen($filteredarray) >=4)
 	  {
 //echo ">>".$filteredarray;
 $hasil=$st->doStemming($filteredarray);
+$hasil2=Enhanced_CS($filteredarray);
 //$st->doStemming($filteredarray)
 	 //  echo " ".$hasil.'<br>';
- $query = "INSERT INTO dokumen (nama_file, token, tokenstem)
-            VALUES('$nama_file', '$filteredarray', '$hasil')";
+ $query = "INSERT INTO dokumen (nama_file, token, tokenstem, tokenstem2)
+            VALUES('$nama_file', '$filteredarray', '$hasil', '$hasil2')";
          echo ">>".$query;   
   mysqli_query($konek, $query);	   
 	   
@@ -72,26 +81,29 @@ $folder = "files/$nama_file";
 $tgl_upload = date("Ymd");
 // Apabila file berhasil di upload
 if (move_uploaded_file($lokasi_file,"$folder")){
-  echo "Nama File : <b>$nama_file</b> sukses di upload";
+//  echo "Nama File : <b>$nama_file</b> sukses di upload";
   
   // Masukkan informasi file ke database
-  $konek = mysqli_connect("fdb21.awardspace.net","2774446_luthfi","al3natore","2774446_luthfi");
+  $konek = mysqli_connect("localhost","id7294462_luthfi","alenatore","id7294462_dbstbi");
 
   $query = "INSERT INTO upload (nama_file, deskripsi, tgl_upload)
             VALUES('$nama_file', '$_POST[deskripsi]', '$tgl_upload')";
             
-  @mysqli_query($konek, $query);
+  mysqli_query($konek, $query);
   
   $tekspdf = new PDF2Text();
   
-  echo $nama_file;
+ // echo $nama_file;
  // $nama_file="./folder/"."uupangan2.pdf";
  $nama_file="./files/".$nama_file;
-    echo ">>>>>>>>>>>>>>>>".$nama_file;
+ // echo ">>>>>>>>>>>>>>>>".$nama_file;
  // $a->setFilename('./folder/uupangan.pdf');
   $tekspdf->setFilename($nama_file);
-  echo "bisa";
-  
+ // echo "bisa";
+  echo '<a href="tokenisasi.php"> >>>LIHAT TABEL </a><br>'; 
+ 
+  echo "UPLOAD LAGI : ";
+ echo '<a href="upload.php"> >>>UPLOAD </a>'; 
 $tekspdf->decodePDF();
 //echo $tekspdf->output(); 
  preproses($tekspdf->output(),$nama_file);
@@ -100,7 +112,6 @@ $tekspdf->decodePDF();
 //$text = $pdf->getText();
 //echo $text;
 ///preprosesing
-
 
 
 //------------------------------------------------------------------------- 
@@ -116,3 +127,17 @@ else{
   echo "File gagal di upload";
 }
 ?>
+<!--
+<br>
+include('hitungbobot.php');
+include('hitungvektor.php');
+-->
+
+
+
+</div>
+  
+<!-- End Page Content -->
+
+</body>
+</html>

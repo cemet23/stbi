@@ -1,11 +1,12 @@
 <?php		
 require_once('connect.php');//Koneksi ke database			
 function cekKamus($kata){
-	// cari di database	
+	// cari di database
+	$konek = mysqli_connect("localhost","id7294462_luthfi","alenatore","id7294462_dbstbi");
 	$sql = "SELECT * from tb_katadasar where katadasar ='$kata' LIMIT 1";
 	//echo $sql.'<br/>';
-	$result = mysql_query($sql) or die(mysql_error());  
-	if(mysql_num_rows($result)==1){
+	$result = mysqli_query($konek, $sql) or die(mysqli_error($konek));  
+	if(mysqli_num_rows($result)==1){
 		return true; // True jika ada
 	}else{
 		return false; // jika tidak ada FALSE
