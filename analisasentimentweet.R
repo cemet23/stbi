@@ -11,6 +11,7 @@ install.packages("foreach")
 install.packages("iterators")
 install.packages("parallel")
 install.packages("doMC", repos="http://R-Forge.R-project.org")
+install.packages("readxl")
 library(lattice)
 library(ggplot2)
 library(NLP)
@@ -26,12 +27,12 @@ library(parallel)
 library(doMC)
 library(readxl)
 registerDoMC(cores=detectCores()) # Use all available cores
-df <- read_excel("D:/University/STBI/sentimen.xlsx")
+df <- read_excel("D:/sentimen.xlsx")
 glimpse(df)
 #df<- read.csv("D:/University/STBI/sentimen.csv", stringsAsFactors = FALSE)
 #glimpse(df)
 df$class <- as.factor(df$class)
-custom_stopwords <- read_excel("D:/University/STBI/stopword.xlsx")
+custom_stopwords <- read_excel("D:/stopword.xlsx")
 custom_stopwords <- as.character(custom_stopwords$V1)
 custom_stopwords <- c(custom_stopwords, stopwords())
 corpus <- Corpus(VectorSource(df$text))
@@ -83,10 +84,10 @@ wordcloud(words = d$word, freq = d$freq, min.freq = 1,
           max.words=200, random.order=FALSE, rot.per=0.35, 
           colors=brewer.pal(8, "Dark2"))
 head(d, 9)
-barplot(d[1:9,]$freq, las = 2, names.arg = d[1:9,]$word,
-        col ="lightblue", main ="Most frequent words",
-        ylab = "Word frequencies")
-dr<- read_excel("D:/University/STBI/sentimenuji.xlsx", stringsAsFactors = FALSE)
+#barplot(d[1:9,]$freq, las = 2, names.arg = d[1:9,]$word,
+#        col ="lightblue", main ="Most frequent words",
+#        ylab = "Word frequencies")
+dr<- read_excel("D:/sentimenuji.xlsx")
 factor(dr$class)
 w=table(dr$class,paste(dr$username,sep ="."))
 w=table(dr$username, dr$class)
